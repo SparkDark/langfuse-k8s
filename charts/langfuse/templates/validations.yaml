@@ -354,3 +354,14 @@ what you are doing.
 {{- if and $workerPdb.create $workerMinAvailableSet $workerMaxUnavailableSet -}}
     {{- fail "Pod Disruption Budget for worker component cannot have both minAvailable and maxUnavailable values" -}}
 {{- end -}}
+
+{{- $assistant := .Values.langfuse.assistant | default dict -}}
+{{- if and $assistant.enabled (not $assistant.model) -}}
+    {{- fail "langfuse.assistant.model is required when langfuse.assistant.enabled is true" -}}
+{{- end -}}
+{{- $sandbox := $assistant.sandbox | default dict -}}
+{{- if eq ($sandbox.provider | default "") "lambda-microvm" -}}
+{{- if or (not $sandbox.imageIdentifier) (not $sandbox.executionRoleArn) (not $sandbox.region) -}}
+    {{- fail "langfuse.assistant.sandbox.imageIdentifier, executionRoleArn, and region are required when langfuse.assistant.sandbox.provider is lambda-microvm" -}}
+{{- end -}}
+{{- end -}}

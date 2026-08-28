@@ -1,6 +1,6 @@
 # langfuse
 
-![Version: 2.0.2](https://img.shields.io/badge/Version-2.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.17.0](https://img.shields.io/badge/AppVersion-4.17.0-informational?style=flat-square)
+![Version: 2.1.0](https://img.shields.io/badge/Version-2.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.17.0](https://img.shields.io/badge/AppVersion-4.17.0-informational?style=flat-square)
 
 Open source LLM engineering platform - LLM observability, metrics, evaluations, prompt management.
 
@@ -73,6 +73,23 @@ Open source LLM engineering platform - LLM observability, metrics, evaluations, 
 | langfuse.affinity | object | `{}` | Affinity for all langfuse deployments |
 | langfuse.allowV1Upgrade | bool | `false` | Allow helm upgrade that would replace leftover v1 Bitnami stores (CH STS, PG PVC, MinIO Deploy) with empty v2 volumes. Default false. The supported path is examples/upgrade-v1-to-v2 (in-place only when stores are external; otherwise a sibling v2 release). |
 | langfuse.allowedOrganizationCreators | list | `[]` | EE: Langfuse allowed organization creators. See [documentation](https://langfuse.com/self-hosting/organization-creators) |
+| langfuse.assistant | object | `{"apiKey":{"secretKeyRef":{"key":"","name":""},"value":""},"baseUrl":"","bedrockRegion":"","enabled":false,"extraHeaders":"","featuresProjectId":"","mcp":{"useInternalWebUrl":false},"model":"","provider":"","sandbox":{"egressNetworkConnectorArn":"","executionRoleArn":"","imageIdentifier":"","provider":"","region":""},"smallModel":"","useResponsesApi":false}` | Langfuse Assistant. Requires application version >= v4.22.0. Helm does not create AWS Lambda MicroVM resources; pass ARNs from Terraform or a manual AWS setup. See https://langfuse.com/self-hosting/configuration/langfuse-assistant |
+| langfuse.assistant.apiKey | object | `{"secretKeyRef":{"key":"","name":""},"value":""}` | LANGFUSE_AI_API_KEY (anthropic and openai). Prefer secretKeyRef. |
+| langfuse.assistant.baseUrl | string | `""` | LANGFUSE_AI_BASE_URL. For openai, include `/v1`. |
+| langfuse.assistant.bedrockRegion | string | `""` | LANGFUSE_AI_AWS_BEDROCK_REGION |
+| langfuse.assistant.enabled | bool | `false` | Set to `true` to set LANGFUSE_IN_APP_AGENT_ENABLED on web and worker |
+| langfuse.assistant.extraHeaders | string | `""` | LANGFUSE_AI_EXTRA_HEADERS as a JSON object string |
+| langfuse.assistant.featuresProjectId | string | `""` | LANGFUSE_AI_FEATURES_PROJECT_ID for tracing Assistant runs on this instance |
+| langfuse.assistant.mcp.useInternalWebUrl | bool | `false` | Point the worker at the in-cluster web Service and allow that Host on web. Overrides worker NEXTAUTH_URL. |
+| langfuse.assistant.model | string | `""` | LANGFUSE_AI_MODEL |
+| langfuse.assistant.provider | string | `""` | LANGFUSE_AI_PROVIDER: bedrock, anthropic, or openai. Unset resolves to bedrock in the app. |
+| langfuse.assistant.sandbox.egressNetworkConnectorArn | string | `""` | LANGFUSE_IN_APP_AGENT_SANDBOX_AWS_LAMBDA_MICROVM_EGRESS_NETWORK_CONNECTOR_ARN |
+| langfuse.assistant.sandbox.executionRoleArn | string | `""` | LANGFUSE_IN_APP_AGENT_SANDBOX_AWS_LAMBDA_MICROVM_EXECUTION_ROLE_ARN |
+| langfuse.assistant.sandbox.imageIdentifier | string | `""` | LANGFUSE_IN_APP_AGENT_SANDBOX_AWS_LAMBDA_MICROVM_IMAGE_IDENTIFIER |
+| langfuse.assistant.sandbox.provider | string | `""` | LANGFUSE_IN_APP_AGENT_SANDBOX_PROVIDER. Use `lambda-microvm` on AWS. Leave empty for Langfuse tools only. |
+| langfuse.assistant.sandbox.region | string | `""` | LANGFUSE_IN_APP_AGENT_SANDBOX_AWS_LAMBDA_MICROVM_REGION |
+| langfuse.assistant.smallModel | string | `""` | LANGFUSE_AI_SMALL_MODEL for supplementary calls such as chat naming |
+| langfuse.assistant.useResponsesApi | bool | `false` | Set LANGFUSE_AI_USE_RESPONSES_API=true for the OpenAI Responses API |
 | langfuse.deployment.annotations | object | `{}` | Annotations for all langfuse deployments |
 | langfuse.deployment.strategy | object | `{}` | Deployment strategy for all langfuse deployments (can be overridden by individual deployments) |
 | langfuse.dnsConfig | object | `{}` | DNS configuration for all langfuse deployments |

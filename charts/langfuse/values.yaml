@@ -159,6 +159,47 @@ langfuse:
   # -- Allows additional lifecycle hooks to be added to all langfuse deployments
   extraLifecycle: {}
 
+  # -- Langfuse Assistant. Requires application version >= v4.22.0. Helm does not create AWS Lambda MicroVM resources; pass ARNs from Terraform or a manual AWS setup. See https://langfuse.com/self-hosting/configuration/langfuse-assistant
+  assistant:
+    # -- Set to `true` to set LANGFUSE_IN_APP_AGENT_ENABLED on web and worker
+    enabled: false
+    # -- LANGFUSE_AI_PROVIDER: bedrock, anthropic, or openai. Unset resolves to bedrock in the app.
+    provider: ""
+    # -- LANGFUSE_AI_MODEL
+    model: ""
+    # -- LANGFUSE_AI_SMALL_MODEL for supplementary calls such as chat naming
+    smallModel: ""
+    # -- LANGFUSE_AI_API_KEY (anthropic and openai). Prefer secretKeyRef.
+    apiKey:
+      value: ""
+      secretKeyRef:
+        name: ""
+        key: ""
+    # -- LANGFUSE_AI_BASE_URL. For openai, include `/v1`.
+    baseUrl: ""
+    # -- LANGFUSE_AI_EXTRA_HEADERS as a JSON object string
+    extraHeaders: ""
+    # -- Set LANGFUSE_AI_USE_RESPONSES_API=true for the OpenAI Responses API
+    useResponsesApi: false
+    # -- LANGFUSE_AI_AWS_BEDROCK_REGION
+    bedrockRegion: ""
+    # -- LANGFUSE_AI_FEATURES_PROJECT_ID for tracing Assistant runs on this instance
+    featuresProjectId: ""
+    sandbox:
+      # -- LANGFUSE_IN_APP_AGENT_SANDBOX_PROVIDER. Use `lambda-microvm` on AWS. Leave empty for Langfuse tools only.
+      provider: ""
+      # -- LANGFUSE_IN_APP_AGENT_SANDBOX_AWS_LAMBDA_MICROVM_IMAGE_IDENTIFIER
+      imageIdentifier: ""
+      # -- LANGFUSE_IN_APP_AGENT_SANDBOX_AWS_LAMBDA_MICROVM_EXECUTION_ROLE_ARN
+      executionRoleArn: ""
+      # -- LANGFUSE_IN_APP_AGENT_SANDBOX_AWS_LAMBDA_MICROVM_REGION
+      region: ""
+      # -- LANGFUSE_IN_APP_AGENT_SANDBOX_AWS_LAMBDA_MICROVM_EGRESS_NETWORK_CONNECTOR_ARN
+      egressNetworkConnectorArn: ""
+    mcp:
+      # -- Point the worker at the in-cluster web Service and allow that Host on web. Overrides worker NEXTAUTH_URL.
+      useInternalWebUrl: false
+
   # Web deployment configuration
   web:
     image:

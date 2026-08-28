@@ -252,6 +252,29 @@ s3:
 
 See the [Helm README](https://github.com/langfuse/langfuse-k8s/blob/main/charts/langfuse/README.md) for a full list of all configuration options.
 
+#### Langfuse Assistant
+
+Requires Langfuse `>= v4.22.0` (`langfuse.image.tag`). Set `langfuse.assistant.enabled` and `langfuse.assistant.model`. Helm does not create AWS Lambda MicroVM resources — pass ARNs from [langfuse-terraform-aws](https://github.com/langfuse/langfuse-terraform-aws) or a manual AWS setup into `langfuse.assistant.sandbox`. See the [self-hosted Assistant docs](https://langfuse.com/self-hosting/configuration/langfuse-assistant).
+
+```yaml
+langfuse:
+  image:
+    tag: "4.22.0" # or newer
+  assistant:
+    enabled: true
+    provider: bedrock
+    model: eu.anthropic.claude-opus-5
+    bedrockRegion: eu-west-1
+    sandbox:
+      provider: lambda-microvm
+      imageIdentifier: arn:aws:lambda:eu-west-1:123456789012:microvm-image:langfuse-in-app-agent-sandbox
+      executionRoleArn: arn:aws:iam::123456789012:role/langfuse-in-app-agent-sandbox-microvm-execution
+      region: eu-west-1
+      egressNetworkConnectorArn: arn:aws:lambda:eu-west-1:123456789012:network-connector:langfuse-in-app-agent-sandbox-microvm-egress
+    mcp:
+      useInternalWebUrl: true
+```
+
 #### Storage Provider Options
 
 Langfuse supports multiple blob storage providers through the `s3.storageProvider` configuration:
